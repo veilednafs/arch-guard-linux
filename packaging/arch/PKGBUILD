@@ -30,12 +30,12 @@ backup=(
 )
 
 source=(
-    "${pkgname}-${pkgver}.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/veilednafs/arch-guard-linux/releases/download/v${pkgver}/arch-guard-linux-${pkgver}.tar.gz"
 )
 
 # Release tarball üretildiğinde SKIP gerçek SHA-256 ile
 # değiştirilmelidir.
-sha256sums=('SKIP')
+sha256sums=('8dfb821e7e200f39589b803aec0327fa9781d6aa527b80fcffd213991337a7c6')
 
 
 build() {
