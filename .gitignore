@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Local configuration
+*.local.toml
+.env
+.env.*
+!.env.example
+
+# Credentials / secrets
+*serviceAccount*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*
+secrets*
+
+# Arch Guard runtime
+events.jsonl
+incidents/
+*.pcap
+*.pcapng
+*.log
+
+# Local reports / captures
+reports/
+captures/
+reference/
+staging/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+var/
+legacy/
+# Test / coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+# Build / packaging
+*.pkg.tar.*
+pkg/
+srcpkg/

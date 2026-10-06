@@ -1,0 +1,14 @@
+[Unit]
+Description=Arch Guard passive nftables sensor
+Before=arch-guard.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=-/usr/bin/nft delete table inet arch_guard
+ExecStart=/usr/bin/nft -f /usr/share/arch-guard/nftables.nft
+ExecStop=-/usr/bin/nft delete table inet arch_guard
+
+[Install]
+WantedBy=multi-user.target

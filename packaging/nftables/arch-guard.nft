@@ -1,0 +1,19 @@
+#
+# Arch Guard passive nftables sensor
+#
+# This table only LOGS inbound TCP SYN packets.
+# It does not accept, reject, drop, redirect or modify traffic.
+#
+# Loopback is excluded because Tailscale userspace-proxy scanning
+# has its own optional sensor.
+#
+
+table inet arch_guard {
+    chain input {
+        type filter hook input priority -5; policy accept;
+
+        iifname != "lo" \
+        tcp flags & (fin | syn | rst | ack) == syn \
+        log prefix "AGNET " counter
+    }
+}

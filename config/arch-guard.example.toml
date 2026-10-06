@@ -1,0 +1,27 @@
+[paths]
+event_log = "/var/log/arch-guard/events.jsonl"
+incident_dir = "/var/log/arch-guard/incidents"
+
+[ssh]
+enabled = true
+service = "sshd.service"
+brute_force_window = 60
+high_threshold = 3
+critical_threshold = 5
+
+[network]
+enabled = true
+port_scan_window = 10
+port_scan_threshold = 6
+cooldown = 60
+
+[tailscale_scan]
+enabled = false
+window = 10
+threshold = 25
+cooldown = 60
+
+[suricata]
+enabled = true
+eve_files = ["/var/log/suricata/eve.json"]
+dedup_seconds = 30

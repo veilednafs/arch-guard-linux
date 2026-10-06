@@ -1,0 +1,18 @@
+[Unit]
+Description=Arch Guard desktop notification consumer
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/arch-guard notify
+
+Restart=on-failure
+RestartSec=2s
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,102 @@
+pkgname=arch-guard-linux
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Local-first host and network security monitor for Arch Linux'
+arch=('any')
+license=('MIT')
+
+depends=(
+    'python'
+    'systemd'
+    'iproute2'
+    'nftables'
+    'libnotify'
+)
+
+makedepends=(
+    'python-build'
+    'python-installer'
+    'python-wheel'
+)
+
+optdepends=(
+    'suricata: IDS alert source'
+    'tailscale: Tailscale peer attribution'
+    'tcpdump: Tailscale userspace scan sensor'
+)
+
+backup=(
+    'etc/arch-guard/config.toml'
+)
+
+source=(
+    "${pkgname}-${pkgver}.tar.gz"
+)
+
+# Release tarball üretildiğinde SKIP gerçek SHA-256 ile
+# değiştirilmelidir.
+sha256sums=('SKIP')
+
+
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    python -m build \
+        --wheel \
+        --no-isolation
+}
+
+
+check() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=src \
+    python -m unittest discover \
+        -s tests
+}
+
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    python -m installer \
+        --destdir="${pkgdir}" \
+        dist/*.whl
+
+    install -Dm644 \
+        config/arch-guard.example.toml \
+        "${pkgdir}/etc/arch-guard/config.toml"
+
+    install -Dm644 \
+        packaging/systemd/arch-guard.service \
+        "${pkgdir}/usr/lib/systemd/system/arch-guard.service"
+
+    install -Dm644 \
+        packaging/systemd/arch-guard-netfilter.service \
+        "${pkgdir}/usr/lib/systemd/system/arch-guard-netfilter.service"
+
+    install -Dm644 \
+        packaging/systemd/arch-guard-notify.service \
+        "${pkgdir}/usr/lib/systemd/user/arch-guard-notify.service"
+
+    install -Dm644 \
+        packaging/nftables/arch-guard.nft \
+        "${pkgdir}/usr/share/arch-guard/nftables.nft"
+
+    install -Dm644 \
+        packaging/examples/10-tailscale-scan.conf \
+        "${pkgdir}/usr/share/arch-guard/examples/10-tailscale-scan.conf"
+
+    install -Dm644 \
+        packaging/sysusers/arch-guard.conf \
+        "${pkgdir}/usr/lib/sysusers.d/arch-guard.conf"
+
+    install -Dm644 \
+        packaging/tmpfiles/arch-guard.conf \
+        "${pkgdir}/usr/lib/tmpfiles.d/arch-guard.conf"
+
+    install -Dm644 \
+        LICENSE \
+        "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
